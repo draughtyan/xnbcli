@@ -1,3 +1,11 @@
+# draughtyan/xnbcli
+
+This version of xnbcli has support for .xnb files which use Aseprite file format.
+
+This allows support for TAMASHIKA (and presumably other games which use aseprite files)
+
+Original readme for xnbcli follows:
+
 # xnbcli
 
 [![Build Status](https://travis-ci.org/LeonBlade/xnbcli.svg?branch=master)](https://travis-ci.org/LeonBlade/xnbcli)
