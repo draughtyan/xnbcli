@@ -1,11 +1,12 @@
 const fs = require('fs');
 const Lzx = require('./Lzx');
+const Lz4 = require('./Lz4');
 const BufferReader = require('../BufferReader');
 const XnbError = require('../XnbError');
 const Log = require('../Log');
 
 /**
- * Used to compress and decompress LZX.
+ * Used to compress and decompress LZX and LZ4.
  * @class
  * @public
  */
@@ -80,6 +81,41 @@ class Presser {
 
         // return a decompressed buffer
         return Buffer.from(decompressed);
+    }
+
+    /**
+     * Decompress an LZ4 compressed block.
+     * @public
+     * @static
+     * @param {Buffer} input - The compressed input buffer.
+     * @param {Buffer} output - The output buffer to write decompressed data to.
+     * @returns {number} The number of bytes written to output.
+     */
+    static lz4DecodeBlock(input, output) {
+        return Lz4.decodeBlock(input, output);
+    }
+
+    /**
+     * Compress a block using LZ4.
+     * @public
+     * @static
+     * @param {Buffer} input - The uncompressed input buffer.
+     * @param {Buffer} output - The output buffer to write compressed data to.
+     * @returns {number} The number of compressed bytes written.
+     */
+    static lz4EncodeBlock(input, output) {
+        return Lz4.encodeBlock(input, output);
+    }
+
+    /**
+     * Get the maximum output size for LZ4 compression.
+     * @public
+     * @static
+     * @param {number} inputSize - The size of the input data.
+     * @returns {number} The maximum possible compressed size.
+     */
+    static lz4EncodeBound(inputSize) {
+        return Lz4.encodeBound(inputSize);
     }
 }
 

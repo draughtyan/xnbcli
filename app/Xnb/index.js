@@ -8,7 +8,6 @@ const { StringReader } = require('./Readers');
 const ReaderResolver = require('./ReaderResolver');
 const Presser = require('../Presser');
 const { resolveImport } = require('../Porter');
-const LZ4 = require('lz4');
 
 // "constants" for this class
 const HIDEF_MASK = 0x1;
@@ -106,7 +105,7 @@ class Xnb {
                 // allocate buffer for LZ4 decode
                 let trimmed = this.buffer.buffer.slice(XNB_COMPRESSED_PROLOGUE_SIZE);
                 // decode the trimmed buffer into decompressed buffer
-                LZ4.decodeBlock(trimmed, decompressed);
+                Presser.lz4DecodeBlock(trimmed, decompressed);
                 // copy the decompressed buffer into our buffer
                 this.buffer.copyFrom(decompressed, XNB_COMPRESSED_PROLOGUE_SIZE, 0, decompressedSize);
                 // reset the byte seek head to read content
@@ -194,8 +193,8 @@ class Xnb {
             this.target = json.header.target;
             this.formatVersion = json.header.formatVersion;
             this.hidef = json.header.hidef;
-            const lz4Compression = (this.target == 'a' || this.target == 'i');
-            this.compressed = lz4Compression ? true : false; // support android LZ4 compression
+            const lz4Compression = (this.target == 'a' || this.target == 'i' || this.target == 'd');
+            this.compressed = lz4Compression ? true : false; // support LZ4 compression for Android/iOS/DesktopGL
 
             // write the header into the buffer
             buffer.write("XNB");
@@ -242,10 +241,10 @@ class Xnb {
                 buffer.buffer.copy(contentBuffer, 0, XNB_COMPRESSED_PROLOGUE_SIZE);
 
                 // create a buffer for the compressed data
-                let compressed = Buffer.alloc(LZ4.encodeBound(contentBuffer.length));
+                let compressed = Buffer.alloc(Presser.lz4EncodeBound(contentBuffer.length));
 
                 // compress the data into the buffer
-                const compressedSize = LZ4.encodeBlock(contentBuffer, compressed);
+                const compressedSize = Presser.lz4EncodeBlock(contentBuffer, compressed);
 
                 // slice off anything extra
                 compressed = compressed.slice(0, compressedSize);
@@ -318,6 +317,9 @@ class Xnb {
                 break;
             case 'i':
                 Log.debug('Target platform: iOS');
+                break;
+            case 'd':
+                Log.debug('Target platform: DesktopGL (FNA/MonoGame)');
                 break;
             default:
                 Log.warn(`Invalid target platform "${this.target}" found.`);
