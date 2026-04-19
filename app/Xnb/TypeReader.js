@@ -106,6 +106,22 @@ const simplifyType = type => {
         case 'Microsoft.Xna.Framework.SoundEffect':
             return 'SoundEffect';
 
+        // MonoGame.Aseprite AsepriteFile
+        case 'MonoGame.Aseprite.Content.Pipeline.Readers.AsepriteFileContentTypeReader':
+            return 'AsepriteFile';
+
+        // MonoGame.Aseprite Sprite
+        case 'MonoGame.Aseprite.Content.Pipeline.Readers.SpriteContentTypeReader':
+            return 'Sprite';
+
+        // MonoGame.Aseprite SpriteSheet
+        case 'MonoGame.Aseprite.Content.Pipeline.Readers.SpriteSheetContentTypeReader':
+            return 'SpriteSheet';
+
+        // MonoGame.Aseprite TextureAtlas
+        case 'MonoGame.Aseprite.Content.Pipeline.Readers.TextureAtlasContentTypeReader':
+            return 'TextureAtlas';
+
         // unimplemented type catch
         default:
             throw new XnbError(`Non-implemented type found, cannot resolve type "${simple}", "${type}".`);

@@ -82,6 +82,11 @@ const exportFile = (filename, xnbObject) => {
                 extension = 'xml';
                 break;
 
+            // MonoGame.Aseprite file
+            case 'AsepriteFile':
+                extension = 'aseprite';
+                break;
+
             case 'SoundEffect':
                 extension = 'wav';
         }

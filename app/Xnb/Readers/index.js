@@ -30,6 +30,7 @@ const readers = [
 
 module.exports = {
     ArrayReader: require('./ArrayReader'),
+    AsepriteFileReader: require('./AsepriteFileReader'),
     BaseReader: require('./BaseReader'),
     BmFontReader: require('./BmFontReader'),
     BooleanReader: require('./BooleanReader'),
@@ -44,9 +45,12 @@ module.exports = {
     SingleReader: require('./SingleReader'),
     SoundEffectReader: require('./SoundEffectReader'),
     SpriteFontReader: require('./SpriteFontReader'),
+    SpriteReader: require('./SpriteReader'),
+    SpriteSheetReader: require('./SpriteSheetReader'),
     StringReader: require('./StringReader'),
     TBinReader: require('./TBinReader'),
     Texture2DReader: require('./Texture2DReader'),
+    TextureAtlasReader: require('./TextureAtlasReader'),
     UInt32Reader: require('./UInt32Reader'),
     Vector2Reader: require('./Vector2Reader'),
     Vector3Reader: require('./Vector3Reader'),
