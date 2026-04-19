@@ -47,8 +47,11 @@ const exportFile = (filename, xnbObject) => {
         // set extension by default
         let extension = 'bin';
 
-        // resolve found content based on key path if empty then its just content
-        const foundContent = (keyPath.length ? content[keyPath] : content);
+        // resolve found content based on key path - traverse nested structure
+        let foundContent = content;
+        for (const key of keyPath) {
+            foundContent = foundContent[key];
+        }
 
         // switch over possible export types
         // TODO: make this a litle cleaner possibly with its own function
@@ -134,8 +137,11 @@ const resolveImports = filename => {
         // get the exported buffer from found
         const exported = found.value;
 
-        // resolve found content based on key path if empty then its just content
-        const foundContent = (keyPath.length ? content[keyPath] : content);
+        // resolve found content based on key path - traverse nested structure
+        let foundContent = content;
+        for (const key of keyPath) {
+            foundContent = foundContent[key];
+        }
 
         if (exported == undefined)
             throw new XnbError('Invalid file export!');
@@ -160,10 +166,8 @@ const resolveImports = filename => {
                     height: png.height
                 };
 
-                if (keyPath.length)
-                    json['content'][keyPath]['export'] = data;
-                else
-                    json['content']['export'] = data;
+                // Set export data via traversed path
+                foundContent['export'] = data;
                 break;
 
             // Compiled Effects
@@ -228,7 +232,7 @@ const search = (object, key, path = []) => {
 
 /**
  * Generator for key value pair of object.
- * @param {objec} object
+ * @param {object} object
  * @returns {Generator}
  */
 function* entries(object) {
